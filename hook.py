@@ -53,6 +53,9 @@ def post_to_discord(hook_url, message):
     r = requests.post(hook_url, json.dumps(message), headers={
         "Content-Type": "application/json",
     })
+    if r.status_code != 200:
+        logger.error("Error: %s", r.text)
+    time.sleep(1)
 
 
 def check_posts(connection_uri, webhook_url):
