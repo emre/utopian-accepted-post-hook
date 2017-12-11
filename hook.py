@@ -53,7 +53,6 @@ def post_to_discord(hook_url, message):
     r = requests.post(hook_url, json.dumps(message), headers={
         "Content-Type": "application/json",
     })
-    print r.text
 
 
 def check_posts(connection_uri, webhook_url):
