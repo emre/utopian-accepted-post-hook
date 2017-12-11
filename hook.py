@@ -24,9 +24,15 @@ def get_db_conn(connection_uri):
 
 
 def get_last_approved_posts(limit=500):
-    r = requests.get(
-        "https://api.utopian.io/api/posts?limit=%s" % limit).json()
-    return r["results"]
+    try:
+        r = requests.get(
+            "https://api.utopian.io/api/posts?limit=%s" % limit).json()
+        return r["results"]
+    except Exception as error:
+        logger.error(error)
+        logger.info("Retrying.")
+        return get_last_approved_posts(limit=limit)
+
 
 
 def get_table(connection_uri):
