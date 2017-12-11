@@ -53,7 +53,7 @@ def post_to_discord(hook_url, message):
     r = requests.post(hook_url, json.dumps(message), headers={
         "Content-Type": "application/json",
     })
-    if r.status_code != 200:
+    if r.status_code != 204:
         logger.error("Error: %s", r.text)
     time.sleep(1)
 
