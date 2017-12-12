@@ -11,8 +11,6 @@ logger = logging.getLogger('utopian-accepted-post-hook')
 logger.setLevel(logging.INFO)
 logging.basicConfig()
 
-BOT_SLEEP_TIME = os.getenv("BOT_SLEEP_TIME", 75)
-
 db_conn = None
 
 
@@ -32,7 +30,6 @@ def get_last_approved_posts(limit=500):
         logger.error(error)
         logger.info("Retrying.")
         return get_last_approved_posts(limit=limit)
-
 
 
 def get_table(connection_uri):
@@ -61,6 +58,8 @@ def post_to_discord(hook_url, message):
     })
     if r.status_code != 204:
         logger.error("Error: %s", r.text)
+        time.sleep(3)
+        return post_to_discord(hook_url, message)
     time.sleep(1)
 
 
@@ -80,15 +79,8 @@ def check_posts(connection_uri, webhook_url):
             "content": message})
 
 
-def scheduler(connection_uri, webhook_url):
-    while True:
-        check_posts(connection_uri, webhook_url)
-        logger.info("Sleeping for %s seconds.", BOT_SLEEP_TIME)
-        time.sleep(BOT_SLEEP_TIME)
-
-
 if __name__ == '__main__':
-    scheduler(
+    check_posts(
         os.getenv("MYSQL_CONNECTION_STRING"),
         os.getenv("DISCORD_HOOK_URL"),
     )
