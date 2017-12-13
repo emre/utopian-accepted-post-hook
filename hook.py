@@ -21,7 +21,7 @@ def get_db_conn(connection_uri):
     return db_conn
 
 
-def get_last_approved_posts(limit=500):
+def get_last_approved_posts(limit=750):
     try:
         r = requests.get(
             "https://api.utopian.io/api/posts?limit=%s" % limit).json()
