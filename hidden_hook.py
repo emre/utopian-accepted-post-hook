@@ -67,7 +67,7 @@ def post_to_discord(hook_url, message):
 def check_posts(connection_uri, webhook_url):
     posts = get_last_hidden_posts()
     for post in posts:
-        message = "**[%s]** - %s flagged contribution: %s" % (
+        message = "**[%s]** - %s hidden contribution: %s" % (
             post.get("json_metadata", {}).get("type", "Unknown"),
             post["moderator"],
             "https://utopian.io" + post["url"]
