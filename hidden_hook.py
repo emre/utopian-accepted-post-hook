@@ -11,6 +11,8 @@ logger = logging.getLogger('utopian-accepted-post-hook')
 logger.setLevel(logging.INFO)
 logging.basicConfig()
 
+from team_map import MOD_TO_TEAM
+
 db_conn = None
 
 
@@ -67,7 +69,8 @@ def post_to_discord(hook_url, message):
 def check_posts(connection_uri, webhook_url):
     posts = get_last_hidden_posts()
     for post in posts:
-        message = "**[%s]** - %s hidden contribution: %s" % (
+        message = "**[%s team]** **[%s]** - %s hidden contribution: %s" % (
+            MOD_TO_TEAM.get(post["moderator"], 'unknown'),
             post.get("json_metadata", {}).get("type", "Unknown"),
             post["moderator"],
             "https://utopian.io" + post["url"]

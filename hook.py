@@ -13,6 +13,8 @@ logging.basicConfig()
 
 db_conn = None
 
+from team_map import MOD_TO_TEAM
+
 
 def get_db_conn(connection_uri):
     global db_conn
@@ -66,8 +68,9 @@ def post_to_discord(hook_url, message):
 def check_posts(connection_uri, webhook_url):
     posts = get_last_approved_posts()
     for post in posts:
-        message = "**[%s]** - %s approved contribution: %s" % (
-            post.get("json_metadata", {}).get("type", "Unknown"),
+        message = "**[%s team]** **[%s]** - %s approved contribution: %s" % (
+            MOD_TO_TEAM.get(post["moderator"], 'unknown'),
+            post.get("json_metadata", {}).get("type", "unknown"),
             post["moderator"],
             "https://utopian.io" + post["url"]
         )
