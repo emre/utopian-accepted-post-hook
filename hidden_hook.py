@@ -69,7 +69,7 @@ def post_to_discord(hook_url, message):
 def check_posts(connection_uri, webhook_url):
     posts = get_last_hidden_posts()
     for post in posts:
-        message = "**[%s team]** **[%s]** - %s hidden contribution: %s" % (
+        message = "**[%s team]** **[%s]** - %s hid contribution: %s" % (
             MOD_TO_TEAM.get(post["moderator"], 'unknown'),
             post.get("json_metadata", {}).get("type", "Unknown"),
             post["moderator"],
