@@ -100,7 +100,7 @@ def check_posts(connection_uri, webhook_url):
         )
 
         accepted_hook.set_footer(
-            ts=str(datetime.datetime.now())
+            ts=str(datetime.datetime.utcnow())
         )
 
         accepted_hook.post()

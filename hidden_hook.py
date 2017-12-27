@@ -101,7 +101,7 @@ def check_posts(connection_uri, webhook_url):
         )
 
         hidden_hook.set_footer(
-            ts=str(datetime.datetime.now())
+            ts=str(datetime.datetime.utcnow())
         )
 
         hidden_hook.post()
