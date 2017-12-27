@@ -55,17 +55,6 @@ def already_posted(connection_uri, author, permlink):
     )
 
 
-def post_to_discord(hook_url, message):
-    r = requests.post(hook_url, json.dumps(message), headers={
-        "Content-Type": "application/json",
-    })
-    if r.status_code != 204:
-        logger.error("Error: %s", r.text)
-        time.sleep(3)
-        return post_to_discord(hook_url, message)
-    time.sleep(1)
-
-
 def check_posts(connection_uri, webhook_url):
     posts = get_last_hidden_posts()
     for post in posts:
@@ -80,8 +69,42 @@ def check_posts(connection_uri, webhook_url):
             continue
         add_log(connection_uri, post["author"], post["url"])
         logger.info(message)
-        post_to_discord(webhook_url, {
-            "content": message})
+
+        from embeds import Webhook
+        hidden_hook = Webhook(
+            url=webhook_url,
+        )
+        hidden_hook.set_author(
+            name=post["moderator"],
+            url="http://utopian.io/%s" % post["moderator"],
+            icon="https://img.busy.org/@%s?height=100&width=100" %
+                 post["moderator"],
+        )
+
+        hidden_hook.add_field(
+            name="Action",
+            value="Hide"
+        )
+        hidden_hook.add_field(
+            name="Category",
+            value=post.get("json_metadata", {}).get("type", "unknown"),
+        )
+        hidden_hook.add_field(
+            name="Supervisor",
+            value=MOD_TO_TEAM.get(post["moderator"], 'unknown'),
+        )
+
+        hidden_hook.add_field(
+            name="Contribution",
+            value="[%s](%s)" % (
+                post["title"], "https://utopian.io" + post["url"]),
+        )
+
+        hidden_hook.set_footer(
+            ts=str(datetime.datetime.now())
+        )
+
+        hidden_hook.post()
 
 
 if __name__ == '__main__':
