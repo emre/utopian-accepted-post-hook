@@ -58,5 +58,5 @@ MOD_TO_TEAM = {
     'juanmiguelsalas': '-',
     'kouloumos': '-',
     'dutch': 'espoem',
-    'toffer': '-',
+    'toffer': 'ruah',
 }
