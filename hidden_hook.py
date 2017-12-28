@@ -85,10 +85,7 @@ def check_posts(connection_uri, webhook_url):
             name="Action",
             value="Hide"
         )
-        hidden_hook.add_field(
-            name="Category",
-            value=post.get("json_metadata", {}).get("type", "unknown"),
-        )
+
         hidden_hook.add_field(
             name="Supervisor",
             value=MOD_TO_TEAM.get(post["moderator"], 'unknown'),
@@ -98,6 +95,17 @@ def check_posts(connection_uri, webhook_url):
             name="Contribution",
             value="[%s](%s)" % (
                 post["title"], "https://utopian.io" + post["url"]),
+            inline=False,
+        )
+        
+        hidden_hook.add_field(
+            name="Author",
+            value=post.get("author"),
+        )
+
+        hidden_hook.add_field(
+            name="Category",
+            value=post.get("json_metadata", {}).get("type", "unknown"),
         )
 
         hidden_hook.set_footer(
