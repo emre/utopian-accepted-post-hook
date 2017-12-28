@@ -86,6 +86,11 @@ def check_posts(connection_uri, webhook_url):
         )
 
         accepted_hook.add_field(
+            name="Category",
+            value=post.get("json_metadata", {}).get("type", "unknown"),
+        )
+
+        accepted_hook.add_field(
             name="Supervisor",
             value=MOD_TO_TEAM.get(post["moderator"], 'unknown'),
         )
@@ -99,14 +104,11 @@ def check_posts(connection_uri, webhook_url):
 
         accepted_hook.add_field(
             name="Author",
-            value=post.get("author"),
+            value="[%s](https://utopian.io/@%s)" % (
+                post.get("author"),
+                post.get("author")
+            ),
         )
-
-        accepted_hook.add_field(
-            name="Category",
-            value=post.get("json_metadata", {}).get("type", "unknown"),
-        )
-
 
         accepted_hook.set_footer(
             ts=str(datetime.datetime.utcnow())
