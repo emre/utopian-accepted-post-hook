@@ -57,6 +57,17 @@ def already_posted(connection_uri, author, permlink):
 def check_posts(connection_uri, webhook_url):
     posts = get_last_approved_posts()
     for post in posts:
+        reviewed = post.get("json_metadata", {}).get("moderator", {}).get(
+            "reviewed", None
+        )
+
+        # flagged = post.get("json_metadata", {}).get("moderator", {}).get(
+        #     "flagged", None
+        # )
+
+        if not reviewed:
+            continue
+
         moderator = post.get("json_metadata").get(
             "moderator", {}).get("account", "-")
         message = "**[%s team]** **[%s]** - %s approved contribution: %s" % (
