@@ -26,7 +26,7 @@ def get_db_conn(connection_uri):
 def get_last_approved_posts(limit=750):
     try:
         r = requests.get(
-            "https://api.utopian.io/api/posts?limit=%s" % limit).json()
+            "https://api.utopian.io/api/posts?limit=%s&&status=reviewed" % limit).json()
         return r["results"]
     except Exception as error:
         logger.error(error)
