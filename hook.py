@@ -61,10 +61,6 @@ def check_posts(connection_uri, webhook_url):
             "reviewed", None
         )
 
-        # flagged = post.get("json_metadata", {}).get("moderator", {}).get(
-        #     "flagged", None
-        # )
-
         if not reviewed:
             continue
 
