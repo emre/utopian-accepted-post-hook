@@ -57,10 +57,12 @@ def already_posted(connection_uri, author, permlink):
 def check_posts(connection_uri, webhook_url):
     posts = get_last_approved_posts()
     for post in posts:
+        moderator = post.get("json_metadata").get(
+            "moderator", {}).get("account", "-")
         message = "**[%s team]** **[%s]** - %s approved contribution: %s" % (
-            MOD_TO_TEAM.get(post["moderator"], 'unknown'),
+            MOD_TO_TEAM.get(moderator, 'unknown'),
             post.get("json_metadata", {}).get("type", "unknown"),
-            post["moderator"],
+            moderator,
             "https://utopian.io" + post["url"]
         )
         if already_posted(connection_uri, post["author"], post["url"]):
@@ -74,10 +76,10 @@ def check_posts(connection_uri, webhook_url):
             url=webhook_url,
         )
         accepted_hook.set_author(
-            name=post["moderator"],
-            url="http://utopian.io/%s" % post["moderator"],
+            name=moderator,
+            url="http://utopian.io/%s" % moderator,
             icon="https://img.busy.org/@%s?height=100&width=100" %
-                 post["moderator"],
+                 moderator,
         )
 
         accepted_hook.add_field(
@@ -92,7 +94,7 @@ def check_posts(connection_uri, webhook_url):
 
         accepted_hook.add_field(
             name="Supervisor",
-            value=MOD_TO_TEAM.get(post["moderator"], 'unknown'),
+            value=MOD_TO_TEAM.get(moderator, 'unknown'),
         )
 
         accepted_hook.add_field(
